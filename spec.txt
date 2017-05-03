@@ -1,0 +1,45 @@
+* Equipments
+    - Camera
+    - LCD Srceen
+    - Setp motor
+    - A box
+
+* Python module requirments
+  - Tkinter
+  - Picamera
+  - smtplib and email
+  - ...
+
+* Replace physical keypad with vitrual keypad
+  In the group project, we use LCD Screen to display the keypad instead of
+  physical keypad. To do this, we use one of the python module called 
+  TKinter to create a User interface on the screen.
+
+* Expected demo
+    A box with LCD screen and a camera on the top of the box can capture 
+    whoever try to enter a pin and open the box. If someone try to open the
+    the box with a wrong pin, s/he will be captured as the piture that will
+    be displaied on the LCD and sent to the admin through Email. People 
+    only can enter pin on the LCD.
+
+* Jobs
+    1. Build or program a UI
+    2. Deal with stuff on Camera
+    3. Deal with stuff on Email
+    4. Make the camera and Email working together
+    5. Deal with stuff on setp motor
+    6. Make all of them working together
+    7. additional jobs like mysql may be done later..
+
+* Details
+    1. Build or program a UI
+        - Use Tkinter python module
+        - 
+    2. Email stuff
+        - Use email and smtplib together to make it happen
+        - 
+    3. Camera stuff
+        - Use picamera module
+
+    4. Step motor stuff
+        - ...
