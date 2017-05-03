@@ -10,8 +10,8 @@ GPIO.setmode(GPIO.BCM)
   
 # Define GPIO signals to use
 # Physical pins 11,15,16,18
-# GPIO17,GPIO22,GPIO23,GPIO24
-StepPins = [17,22,23,24]
+# GPIO17,GPIO18,GPIO21,GPIO22
+StepPins = [17,18,21,22]
    
 # Set all pins as output
 for pin in StepPins:
