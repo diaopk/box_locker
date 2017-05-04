@@ -6,6 +6,9 @@
 # Import python modules
 import Tkinter as tk
 import tkFont as tkf
+import pc
+
+#sys.path.insert(0, './test_picamera/')
 
 # Define a class of a whole App
 class Application(tk.Frame):
@@ -44,7 +47,7 @@ class Application(tk.Frame):
         self.e2 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=self.e_font, show='*', state=tk.DISABLED)
         self.e3 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=self.e_font, show='*', state=tk.DISABLED)
         self.e4 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=self.e_font, show='*', state=tk.DISABLED)
-        self.e1.grid(row=0, column=0, sticky=tk.S+tk.N)
+        self.e1.grid(row=0, column=0, sticky=tk.W)
         self.e2.grid(row=0, column=1, sticky=tk.W)
         self.e3.grid(row=0, column=2)
         self.e4.grid(row=0, column=3)
@@ -84,8 +87,10 @@ class Application(tk.Frame):
         pin = str(self.e1.get()+self.e2.get()+self.e3.get()+self.e4.get())
         if pin == '1234':
             print 'Access Accepted'
+            self.entries_checker(process='delete')
         else:
             print 'Access Not Accepted'
+            pc.photor()
 
     def cencel_btn(self, h):
         h.config(state=tk.NORMAL)
@@ -112,5 +117,5 @@ class Application(tk.Frame):
 
 app = Application()
 app.master.title('Security Box Keypad')
-app.master.geometry('600x400')
+#app.master.geometry('600x400')
 app.mainloop()
