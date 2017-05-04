@@ -2,13 +2,24 @@
 # This python script displaies a number pad on the LCD screen for users
 # There is entry at the first row showing pin entered in '*'
 # The correct pin is: 1234
+
+# Import python modules
 import Tkinter as tk
+import tkFont as tkf
 
 # Define a class of a whole App
 class Application(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
-        self.grid()
+        self.grid(sticky=tk.N+tk.S+tk.E+tk.W)
+
+        # outmost window on the screen
+        top = self.winfo_toplevel()
+        top.rowconfigure(0, weight=1)
+        top.columnconfigure(0, weight=1)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
         self.numberpad_creator()
 
     # Method Displaies a numberpad
@@ -16,17 +27,25 @@ class Application(tk.Frame):
         # 2 Frames, one for entries one for numbers
         self.f1 = tk.Frame(self)
         self.f2 = tk.Frame(self)
-        
-        self.f1.grid(row=0)
-        self.f2.grid(row=1)
+
+        self.f1.grid(sticky=tk.N+tk.S)
+        self.f2.grid(sticky=tk.N+tk.S)
+
+        self.f1.rowconfigure(0, weight=1)
+        self.f1.columnconfigure(0, weight=1)
+        self.f2.rowconfigure(1, weight=1)
+        self.f2.columnconfigure(0, weight=1)
+
+        # Font
+        self.e_font = tkf.Font(size=15, weight='bold')
 
         # 4 Entries
-        self.e1 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=10, show='*', state=tk.DISABLED)
-        self.e2 = tk.Entry(self.f1, width=4, justify=tk.CENTER, show='*', state=tk.DISABLED)
-        self.e3 = tk.Entry(self.f1, width=4, justify=tk.CENTER, show='*', state=tk.DISABLED)
-        self.e4 = tk.Entry(self.f1, width=4, justify=tk.CENTER, show='*', state=tk.DISABLED)
-        self.e1.grid(row=0, column=0)
-        self.e2.grid(row=0, column=1)
+        self.e1 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=self.e_font, show='*', state=tk.DISABLED)
+        self.e2 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=self.e_font, show='*', state=tk.DISABLED)
+        self.e3 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=self.e_font, show='*', state=tk.DISABLED)
+        self.e4 = tk.Entry(self.f1, width=4, justify=tk.CENTER, font=self.e_font, show='*', state=tk.DISABLED)
+        self.e1.grid(row=0, column=0, sticky=tk.S+tk.N)
+        self.e2.grid(row=0, column=1, sticky=tk.W)
         self.e3.grid(row=0, column=2)
         self.e4.grid(row=0, column=3)
 
@@ -42,9 +61,9 @@ class Application(tk.Frame):
         self.btn9 = tk.Button(self.f2, text='9', width=3, command=lambda:self.entries_checker(9, process='input'))
         self.btn0 = tk.Button(self.f2, text='0', width=3, command=lambda:self.entries_checker(0, process='input'))
 
-        self.btn1.grid(row=0, column=0)
-        self.btn2.grid(row=0, column=1)
-        self.btn3.grid(row=0, column=2)
+        self.btn1.grid(row=0, column=0, sticky=tk.W+tk.E)
+        self.btn2.grid(row=0, column=1, sticky=tk.W+tk.E)
+        self.btn3.grid(row=0, column=2, sticky=tk.W+tk.E)
         self.btn4.grid(row=1, column=0)
         self.btn5.grid(row=1, column=1)
         self.btn6.grid(row=1, column=2)
@@ -93,4 +112,5 @@ class Application(tk.Frame):
 
 app = Application()
 app.master.title('Security Box Keypad')
+app.master.geometry('600x400')
 app.mainloop()
