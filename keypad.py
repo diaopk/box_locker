@@ -6,11 +6,13 @@
 # Import python modules
 import Tkinter as tk
 import tkFont as tkf
-import project_header
+import pc
+from PIL import ImageTk, Image
 
 #sys.path.insert(0, './test_picamera/')
 
 # Define a class of a whole App
+# --- Start of class Application ---
 class Application(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
@@ -114,6 +116,8 @@ class Application(tk.Frame):
             else:
                 print process
                 print 'Nothing processed'
+
+    # --- End of the class Application --- 
 
 app = Application()
 app.master.title('Security Box Keypad')
