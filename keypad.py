@@ -6,7 +6,7 @@
 # Import python modules
 import Tkinter as tk
 import tkFont as tkf
-import pc
+import project_header
 
 #sys.path.insert(0, './test_picamera/')
 
