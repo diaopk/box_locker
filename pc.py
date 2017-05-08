@@ -15,16 +15,17 @@ def photor1():
     print 'Sorry we captured you!'
 
 # Object photor
-class Photor():
-    def __init__(self, p, d):
-        self.path = p
-        self.datetime = d
+class Photo():
+    def __init__(self):
+        self.datetime, self.path = self.take_photo()
 
-    def take_photo():
-        camera.capture('./test_picamera/-'+str(self.datetime)+'.jpg')
+    def take_photo(self):
+        time = datetime.datetime.now()
+        path = './test_picamera/'+str(time)+'.jpg'
+        camera.capture(path)
         print 'Sorry we captured you!'
+        return (time, path)
 
-    def get_datetime():
-        return self.get_datetime
-
+    def get_datetime(self):
+        return self.datetime
 

@@ -9,14 +9,14 @@ import tkFont as tkf
 import pc
 from PIL import ImageTk, Image
 
-#sys.path.insert(0, './test_picamera/')
-
 # Define a class of a whole App
 # --- Start of class Application ---
 class Application(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.grid(sticky=tk.N+tk.S+tk.E+tk.W)
+
+        
 
         # outmost window on the screen
         top = self.winfo_toplevel()
@@ -69,13 +69,13 @@ class Application(tk.Frame):
         self.btn1.grid(row=0, column=0, sticky=tk.W+tk.E)
         self.btn2.grid(row=0, column=1, sticky=tk.W+tk.E)
         self.btn3.grid(row=0, column=2, sticky=tk.W+tk.E)
-        self.btn4.grid(row=1, column=0)
-        self.btn5.grid(row=1, column=1)
-        self.btn6.grid(row=1, column=2)
-        self.btn7.grid(row=2, column=0)
-        self.btn8.grid(row=2, column=1)
-        self.btn9.grid(row=2, column=2)
-        self.btn0.grid(row=3, column=1)
+        self.btn4.grid(row=1, column=0, sticky=tk.W+tk.E)
+        self.btn5.grid(row=1, column=1, sticky=tk.W+tk.E)
+        self.btn6.grid(row=1, column=2, sticky=tk.W+tk.E)
+        self.btn7.grid(row=2, column=0, sticky=tk.W+tk.E)
+        self.btn8.grid(row=2, column=1, sticky=tk.W+tk.E)
+        self.btn9.grid(row=2, column=2, sticky=tk.W+tk.E)
+        self.btn0.grid(row=3, column=1, sticky=tk.W+tk.E)
 
         # A Enter and Cencel bottons
         self.cencel = tk.Button(self.f2, text='Cencel', command=lambda:self.entries_checker(process='delete'))
@@ -92,7 +92,8 @@ class Application(tk.Frame):
             self.entries_checker(process='delete')
         else:
             print 'Access Not Accepted'
-            pc.photor()
+            self.p = pc.Photo()
+            self.entries_checker(process='delete')
 
     def cencel_btn(self, h):
         h.config(state=tk.NORMAL)
@@ -117,9 +118,15 @@ class Application(tk.Frame):
                 print process
                 print 'Nothing processed'
 
+    def screen_width(self):
+        return self.wininfo_srceenwidth()
+
+    def screen_height(self):
+        return self.wininfo_sreenheight()
+
     # --- End of the class Application --- 
 
 app = Application()
 app.master.title('Security Box Keypad')
-#app.master.geometry('600x400')
+app.master.geometry('%dx%dx+%d+%d' % (300, 300, app.screen_width(), app.screen_height()))
 app.mainloop()
