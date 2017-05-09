@@ -6,8 +6,9 @@
 # Import python modules
 import Tkinter as tk
 import tkFont as tkf
-import pc
+#import pc
 from PIL import ImageTk, Image
+
 
 # Define a class of a whole App
 # --- Start of class Application ---
@@ -15,8 +16,6 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.grid(sticky=tk.N+tk.S+tk.E+tk.W)
-
-        
 
         # outmost window on the screen
         top = self.winfo_toplevel()
@@ -87,14 +86,46 @@ class Application(tk.Frame):
     def enter_btn(self):
         # Make 4 digits a string
         pin = str(self.e1.get()+self.e2.get()+self.e3.get()+self.e4.get())
+
+        # If pin is correct, then accept and clear the entries
         if pin == '1234':
             print 'Access Accepted'
             self.entries_checker(process='delete')
-        else:
+        else: # Else capture the guy trying to access the box with the wrong pin
             print 'Access Not Accepted'
-            self.p = pc.Photo()
+            #p = pc.Photo()
             self.entries_checker(process='delete')
+            self.show_topwin()
+            
+    # Method to display the toplevel window with the photo
+    # Store img object as the global variable to prevent
+    # from the gabage collector
+    def show_topwin(self, photo=None):
+        # Define the position that the toplevel
+        # window displaies as the same as the root
+        # window
+        w = str(self.winfo_screenwidth()/2 - 400)
+        h = str(self.winfo_screenheight()/2 -240)
+        post = '800x480+'+w+'+'+h
 
+        topwin = tk.Toplevel()
+        topwin.title('WE CAPTURED YOU')
+        topwin.geometry(post)
+        topwin.configure(bg='black')
+
+        # if photo is None then go for tests
+        if photo is None:
+            self.img = ImageTk.PhotoImage(Image.open('image.jpg'))
+        else:
+            self.img = ImageTk.PhotoImage(Image.open(photo))
+
+        label = tk.Label(topwin, image=self.img)
+        label.pack(side='bottom', fill='both', expand='yes')
+
+        # Destroy the toplevel window after 3sec it created
+        topwin.after(3000, lambda:topwin.destroy())
+
+    # Method to clear the entry h
     def cencel_btn(self, h):
         h.config(state=tk.NORMAL)
         h.delete(0)
@@ -106,27 +137,38 @@ class Application(tk.Frame):
         e.insert(tk.END, str(digit))
         e.config(state=tk.DISABLED)
 
+    # Method to process 'delete' or 'input' for entries
+    # based on the value of **process
     def entries_checker(self, digit=None, **process):
         for ety in [self.e1, self.e2, self.e3, self.e4]:
+
+            # If the value of process is 'input' and the 
+            # entry is epty then insert the digit into the
+            # entry. break when a single input process finishes
             if process.get('process') == 'input':
                 if len(ety.get()) == 0:
                     self.input(ety, digit)
                     break
+
+            # else if the value of process if 'delete' then 
+            # invoke cencel_btn() to clear the input
             elif process.get('process') == 'delete' and digit is None:
                 self.cencel_btn(ety)
+
+            # else print some debug messagaes
             else:
                 print process
                 print 'Nothing processed'
 
     def screen_width(self):
-        return self.wininfo_srceenwidth()
+        return self.winfo_screenwidth()/2
 
     def screen_height(self):
-        return self.wininfo_sreenheight()
+        return self.winfo_screenheight()/2
 
     # --- End of the class Application --- 
 
 app = Application()
 app.master.title('Security Box Keypad')
-app.master.geometry('%dx%dx+%d+%d' % (300, 300, app.screen_width(), app.screen_height()))
+app.master.geometry('%dx%d+%d+%d' % (300, 300, app.screen_width()-150, app.screen_height()-150))
 app.mainloop()
