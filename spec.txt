@@ -5,15 +5,33 @@
     - A box
 
 * Python module requirments
-  - Tkinter
-  - Picamera
-  - smtplib and email
-  - ...
+    UI:
+        - Tkinter(a general python graphical module to display keypad and 
+          other UIs)
+        - tkFont(a python module for changing text font for Tkinter)
+        - ImageTk, Image from PIL(python modules to retrive an image as as
+    
+    Camera:
+        - Picamera(a python module for handling reasberry pi camera module)
+
+    Email:
+        - smtplib(a python module to build service and send emails)
+        - email.MIMEMultipart
+        - email.MIMEText
+        - email.MIMEImage
+    
+    Step motor:
+        - RPI.GPIO
+
+    Others:
+        - os(obtain operating system info)
+        - re(for simple regular expression uses)
+        - datetime(to get the system time)
 
 * Replace physical keypad with vitrual keypad
-  In the group project, we use LCD Screen to display the keypad instead of
-  physical keypad. To do this, we use one of the python module called 
-  TKinter to create a User interface on the screen.
+    In the group project, we use LCD Screen to display the keypad instead 
+    of physical keypad. To do this, we use one of the python module called
+    TKinter to create a User interface on the screen.
 
 * Expected demo
     A box with LCD screen and a camera on the top of the box can capture 
@@ -29,17 +47,171 @@
     4. Make the camera and Email working together
     5. Deal with stuff on setp motor
     6. Make all of them working together
-    7. additional jobs like mysql may be done later..
+    7. additional jobs like mysql, secure pin may be done later..
 
 * Details
     1. Build or program a UI
         - Use Tkinter python module
-        - 
+        - Description
+            This script creates a keypad that displaies 0-9 number keys,
+            cencel button, enter button, browse button and forget button
+
+            Here are what 4 functional buttons are for
+                - cencel button for removing digits entered
+                - enter button for confirming pin entered to open the box
+                - browse button for browsing the photo library
+                - forget button for reset the pin if admin forgets it
+
+            In clicking 
+                - cencel button, no matter how many digits inputed, the 
+                  cencel button removes all of them
+                - enter button, if the pin entered is correct then open
+                  the box. If the pin is incorrect, the program invokes 
+                  the take_photo() method in the pc.py for capturing 
+                  the one who tries to open the box with the wrong pin,
+                  and sends admin an email with that photo
+                - browse button, open a toplevel window to display all 
+                  photos in the './test_picamera' directory
+                - forget button, ...
+
+        - keypad.py
+            - class Application
+                - attributes
+                    - f* (Frame widgets)
+                    - e* (Entry widgets)
+                    - btn* (Button widgets)
+                    - cencel, enter, browse and forget (4 buttons)
+                    - ...
+
+                - methods
+                    - btn_enter()
+                       Check the pin. If correct open the box. If not,
+                       photo_manager calls the take_photo() method and call
+                       the show_topwin() method to show the photo it took
+                    - btn_browse()
+                        Call the show_topwin() method with an argument 
+                        process='browse'
+                    - btn_forget()
+                        ...
+                    - btn_cencel(h)
+                        Delete values in Entry h
+                    - show_topwin(photo=None, **kwarg)
+                        Show the toplevel window depend on what the kwarg
+                        is. If process=='takephoto' then show the toplevel
+                        window with the photo and destroy the window after
+                        3 seconds.
+                        If process=='browse' then show the toplevel window
+                        with all photos in the './test_picamera/' directory
+                    - input(e, digit)
+                        Insert digit into Entry e
+                    - entries_checker(digit=None, **process)
+                        proecess operations depended on the **process
+                        process == input then input digit for the entry
+                        process == delete then remove all digits
+                    - screen_width()
+                        Retuen the width of the screen
+                    - screen_height()
+                        Return the height of the screen
+        - ...
+
     2. Email stuff
         - Use email and smtplib together to make it happen
-        - 
+        - Desciprtion
+            This script defines an Email object for constructing the email
+            content and sending an email. After finishing constructionof an
+            Email object, call send() method to send it.
+
+        - Example
+            em = Email(photo)
+            em.send('example@example.com')
+
+        - Emailer.py
+            - class Email
+                - attributes: 
+                    - __admin_addr (administrator's address)
+                    - __pass (administrator's email password)
+                    - __to_addr (the receiver's email address)
+                    - msg (the object holds multiple content about the 
+                      email to be sent, including sender, receiver, subject
+                      and email content itself)
+                    - image (the photo)
+                    - path (the path to the photo)
+                    - datetime (the datetime the photo took)
+                - method:
+                    - send(to_addr=None)
+                        - this method is for sending an email to the
+                          to_addr. If to_addr is not specified, then send
+                          to the default address.
+        - ... 
+
     3. Camera stuff
         - Use picamera module
+        - Description
+            This script defines a Photo_Manager object and a Photo object.
+            The Photo_Manager takes no arguments to create an instance. It
+            holds a list of Photo objects in the './test_picamera/' 
+            directory. It can represent a photo object by using some 
+            methods like first() and tail(). For example, photoManager.first() gets the first photo object of the photo object's list. photoManager.first().get_path() returns the path to the first photo object.
+
+            The Photo object takes the path to the photo and datetime the 
+            photo takes as arguments.
+
+        - Example
+            photoManager = Photo_Manager()
+            photoManager.taek_photo() # to take a photo and store it
+            photoManager.first() # get the first photo object
+            photoManager.next().get_path() # get the the path to the next photo object
+            photoManager.get_current_photo() # get the current photo object, which is photo_seq[1]
+
+        - pc.py
+            - class Photo_Manager
+                - attributes
+                    - camaera (PiCamera instance)
+                    - photo_seq (a list of photo objects)
+                    - index (the current index in the photo_seq)
+                    - current_photo (the current photo object in the photo_seq
+                
+                - methods
+                    - __iter__()
+                        Return this Photo_Manager
+                    - __browse()
+                        return every image in the './test_picamera/' 
+                        directory in the format of jpg or png
+                    - get_photos()
+                        Return photo_seq
+                    - get_current_photo()
+                        Return current photo object
+                    - get_index()
+                        Return current index in the photo_seq
+                    - take_photo()
+                        Take a photo and store this photo as a photo 
+                        object at the first of the photo_seq
+                    - next()
+                        Return next photo object set index and 
+                        current_photo to this photo object
+                    - up()
+                        Return the previous photo object and set index and
+                        current_photo to this photo object
+                    - first()
+                        Return the first photo object and set index and 
+                        current_photo to this photo object
+                    - last()
+                        Return the last photo object and set index and 
+                        current_photo to this photo object
+            
+            - class Photo
+                - attributes
+                    - path (the path to this photo object)
+                    - datetime (the datetime this photo takes)
+                
+                - methods
+                    - get_datetime()
+                        Return the datetime
+                    - get_path()
+                        Return the path
+        - ...
 
     4. Step motor stuff
+        - Use RPI.GPIO module.
+        - stepper.py
         - ...

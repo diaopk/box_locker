@@ -11,7 +11,7 @@ camera = PiCamera()
 camera.resolution(800, 480)
 
 # Object photor
-class Photo():
+class Photos():
     def __init__(self):
         self.datetime, self.path = self.take_photo()
 
@@ -24,10 +24,8 @@ class Photo():
         return (time, path)
 
     # Method to return the datetime
-    def get_datetime(self):
-        return self.datetime
+    def get_datetime(self): return self.datetime
 
     # Method to return path
-    def get_path(self):
-        return self.path
+    def get_path(self): return self.path
 
