@@ -46,8 +46,6 @@ class Email:
         server.sendmail(self.__admin_addr, self.__to_addr, text)
         server.quit()
 
-    def quit(self):
-        pass
 """ Testing code
 pm = Photo_Manager()
 em = Email(pm.first().get_path(), pm.first().get_datetime())

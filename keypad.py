@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # This python script displaies a number pad on the LCD screen for users
 # There is entry at the first row showing pin entered in '*'
-# The correct pin is: 1234
+# The pin is: 1234
 
 # Import python modules
 import Tkinter as tk
@@ -37,8 +37,6 @@ class Application(tk.Frame):
     
         self.f1.grid()
         self.f2.grid()
-        #self.f1.grid(sticky=tk.N+tk.S)
-        #self.f2.grid(sticky=tk.N+tk.S)
 
         self.f1.rowconfigure(0, weight=1)
         self.f1.columnconfigure(0, weight=1)
@@ -107,9 +105,9 @@ class Application(tk.Frame):
             print 'Access Not Accepted'
             self.entries_checker(process='delete')
             self.photo_manager.take_photo()
-            self.show_topwin()
+            #self.show_topwin()
             # Show the first photo
-            #self.show_topwin(self.photo_manager.first(), process='takephoto')
+            self.show_topwin(self.photo_manager.last(), process='takephoto')
 
     # Method to open a window for browsing photo
     def btn_browse(self):
@@ -126,27 +124,27 @@ class Application(tk.Frame):
         # Define the position that the toplevel
         # window displaies as the same as the root
         # window
-        w = str(self.winfo_screenwidth()/2 - 400)
-        h = str(self.winfo_screenheight()/2 -240)
-        pos = '800x480+%s+%s' % (w, h)
+        w = str(self.winfo_screenwidth()/2 - 150)
+        h = str(self.winfo_screenheight()/2 -150)
+        pos = '300x300+%s+%s' % (w, h)
 
         topwin = tk.Toplevel()
-        topwin.geometry(pos)
         topwin.configure(bg='black')
        
         # If 'take a photo'
         if kwarg.get('process') == 'takephoto':
+            topwin.geometry('800x480+400+240')
             # if photo is None then go for tests
             if photo is None:
                 self.img = ImageTk.PhotoImage(Image.open('image.jpg'))
             else:
-                self.img = ImageTk.PhotoImage(Image.open(photo))
+                self.img = ImageTk.PhotoImage(Image.open(photo.get_path()))
             topwin.title('WE CAPTURED YOU')
             label = tk.Label(topwin, image=self.img)
             label.pack(side='bottom', fill='both', expand='yes')
             
             # Destroy the toplevel window after 3sec it created
-            topwin.after(3000, lambda:topwin.destroy())
+            topwin.after(10000, lambda:topwin.destroy())
 
             # Define an email object to be sent
             e = Email(photo)
@@ -155,6 +153,7 @@ class Application(tk.Frame):
         # else if 'browse photos'
         # show the photo browser
         elif kwarg.get('process') == 'browse':
+            topwin.geometry(pos)
             topwin.title('Browse photos')
             
             # --- Define widgets ---
