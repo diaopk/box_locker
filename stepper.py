@@ -30,7 +30,7 @@ Seq = [[1,0,0,1],
         [0,0,1,1],
         [0,0,0,1]]
                       
-StepCount = len(Seq)
+StepCount = len(Seq) # 8
 StepDir = 1 # Set to 1 or 2 for clockwise
                           # Set to -1 or -2 for anti-clockwise
                            
@@ -51,7 +51,7 @@ while True:
                                               
     for pin in range(0,4):
         xpin=StepPins[pin]# Get GPIO
-        if Seq[StepCounter][pin]!=0:
+        if Seq[StepCounter][pin]==1:
             print " Enable GPIO %i" %(xpin) 
             GPIO.output(xpin, True)         
         else:                               

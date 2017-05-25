@@ -3,12 +3,11 @@
 # There is entry at the first row showing pin entered in '*'
 # The pin is: 1234
 
-# Import python modules
+# Import required modules
 import Tkinter as tk
 import tkFont as tkf
 from PIL import ImageTk, Image
-#from pc import *
-from test_pc import *
+from pc import *
 from Emailer import Email
 
 
