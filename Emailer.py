@@ -119,5 +119,3 @@ class Email:
 
 # --- End of the class ---
 
-email = Email()
-print email.receive()

@@ -23,6 +23,6 @@ class Pin():
             return sha1(self.__salt.encode() + str(self.__pin).encode()).hexdigest() + ":" + self.__salt
 
     # Method to check the passwod
-    def pin_check(self, hashed_pswd, input_pswd):
+    def pin_check(self, input_pswd):
         password, salt = self.pin_create(self.__pin).split(':')
         return password == sha1(salt.encode() + str(input_pswd).encode()).hexdigest()
