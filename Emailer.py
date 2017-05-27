@@ -22,11 +22,6 @@ class Email:
 
         self.msg = MIMEMultipart()
 
-        """
-        self.msg['From'] = self.__admin_addr
-        self.msg['To'] = self.__to_addr
-        self.msg['Subject'] = 'Security Info'
-
         # Info about the image to be sent
         self.datetime = photo.get_datetime()
         self.path = photo.get_path()
@@ -100,7 +95,7 @@ class Email:
         #server.quit() # Quit the server
 
         # Vertify email addresses from senders
-        if self.__to_addr_caroline in messages['From'] or self.__to_addr_junli in messages['From'] or self.__to_addr_louise in messages['From']:
+        if self.to_addr_caroline in messages['From'] or self.to_addr_junli in messages['From'] or self.to_addr_louise in messages['From']:
             for msg in messages.walk():
                 if msg.get_content_type():
                     # if everyting is fine 
