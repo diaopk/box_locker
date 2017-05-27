@@ -3,13 +3,13 @@
 # There is entry at the first row showing pin entered in '*'
 # The pin is: 1234
 
-# Import required modules
+# Import required modules and libraries
 import Tkinter as tk
 import tkFont as tkf
 from PIL import ImageTk, Image
 from pc import *
 from Emailer import Email
-
+from password import Pin
 
 # Define a class of a whole App
 # --- Start of class Application ---
@@ -18,6 +18,7 @@ class Application(tk.Frame):
         tk.Frame.__init__(self, master)
         self.grid(sticky=tk.N+tk.S+tk.E+tk.W)
         self.photo_manager = Photo_Manager()
+        self.pswd = Pin()
 
         # outmost window on the screen
         top = self.winfo_toplevel()
@@ -97,7 +98,7 @@ class Application(tk.Frame):
         pin = str(self.e1.get()+self.e2.get()+self.e3.get()+self.e4.get())
 
         # If pin is correct, then accept and clear the entries
-        if pin == '1234':
+        if self.pswd.pin_check(pin):
             print 'Access Accepted'
             self.entries_checker(process='delete')
         else: # Else capture the guy trying to access the box with the wrong pin
