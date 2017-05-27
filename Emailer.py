@@ -16,9 +16,9 @@ class Email:
         # Define email addresses
         self.__admin_addr = 'junliliang1214@gmail.com'
         self.__pass = '%!&#!^^%!yyzaA'
-        self.__to_addr_caroline = '@gmail.com'
-        self.__to_addr_junli = 'diaopkaique@gmail.com'
-        self.__to_addr_louise = '@gmail.com'
+        self.to_addr_caroline = '@gmail.com'
+        self.to_addr_junli = 'diaopkaique@gmail.com'
+        self.to_addr_louise = '@gmail.com'
 
         self.msg = MIMEMultipart()
 
@@ -41,30 +41,36 @@ class Email:
         self.msg.attach(self.image)
         """
     # Method to send an email
-    def send(self, photo, to_addr=None):
+    def send(self, photo=None, to_addr=None, body=None):
         # Set up an address to deliver
         if to_addr is not None:
             self.__to_addr = to_addr
         else:
-            self.__to_addr = self.__to_addr_junli
+            self.__to_addr = self.to_addr_junli
 
         # Set up header information
         self.msg['From'] = self.__admin_addr
         self.msg['To'] = self.__to_addr
         self.msg['Subject'] = 'Security info'
 
-        # Set up an image
-        self.datetime = photo.get_datetime()
-        self.path = photo.get_path()
-        self.img = open(self.path, 'rb').read()
+        # If send with the photo
+        if photo is not None and body is None: 
+            # Set up an image
+            datetime = photo.get_datetime()
+            path = photo.get_path()
+            self.img = open(path, 'rb').read()
+            
+            # Set up the body
+            body = "Someone tried to access the box without permission at %s" % (datetime)
 
-        # Set up the body
-        self.body = "Someone tried to access the box without permission at %s" % (self.datetime)
-
-        # Set up the attachment
-        self.msg.attach(MIMEText(self.body, 'plain'))
-        self.image = MIMEImage(self.img, name=os.path.basename(self.path))
-        self.msg.attach(self.image)
+            # Set up the attachment
+            self.msg.attach(MIMEText(body, 'plain'))
+            self.image = MIMEImage(self.img, name=os.path.basename(path))
+            self.msg.attach(self.image)
+        
+        # If send with new pin
+        elif photo is None and body is not None:
+            self.msg.attach(MIMEText(body, 'plain'))
 
         # Send the the email
         server = SMTP('smtp.gmail.com', 587)
@@ -118,4 +124,5 @@ class Email:
             return body
 
 # --- End of the class ---
-
+server = Email()
+print server.to_addr_junli

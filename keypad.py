@@ -17,8 +17,11 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.grid(sticky=tk.N+tk.S+tk.E+tk.W)
+
+        # Define objects from imported class
+        self.server = Email()
         self.photo_manager = Photo_Manager()
-        self.pswd = Pin()
+        self.pin = Pin()
 
         # outmost window on the screen
         top = self.winfo_toplevel()
@@ -86,11 +89,13 @@ class Application(tk.Frame):
         self.enter = tk.Button(self.f2, text='Enter', command=lambda:self.btn_enter()) 
         self.browse = tk.Button(self.f2, text='Browse', command=lambda:self.btn_browse())
         self.forget = tk.Button(self.f2, text='Forget', command=lambda:self.btn_forget())
+        self.change = tk.Button(self.f2, text='Change', command=lambda:self.btn_change())
 
         self.cencel.grid(row=3, column=0)
         self.enter.grid(row=3, column=2)
         self.browse.grid(row=4, column=0)
         self.forget.grid(row=4, column=1)
+        self.change.grid(row=4, column=2)
 
     # Method to check pin
     def btn_enter(self):
@@ -113,8 +118,12 @@ class Application(tk.Frame):
     def btn_browse(self):
         self.show_topwin(process='browse')
 
-    # Method to deal with the forgotten pin
+    # Method to reset the pin
     def btn_forget(self):
+        self.pin.pin_forget()
+
+    # Method to change the pin
+    def btn_change(self):
         pass
             
     # Method to display the toplevel window with the photo
@@ -146,9 +155,8 @@ class Application(tk.Frame):
             # Destroy the toplevel window after 3sec it created
             topwin.after(10000, lambda:topwin.destroy())
 
-            # Define an email object to be sent
-            e = Email(photo)
-            e.send()
+            # Send the email with the photo
+            self.server.send(photo=photo)
         
         # else if 'browse photos'
         # show the photo browser

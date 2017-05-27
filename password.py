@@ -4,6 +4,8 @@
 # Import required modules and libraries
 from uuid import uuid4
 from hashlib import sha1
+from random import randint
+from Emailer import Email
 
 class Pin():
     def __init__(self):
@@ -14,6 +16,19 @@ class Pin():
     def __salt_create(self):
         salt = uuid4().hex
         return salt
+    
+    # Method to crete a new pin
+    # generate a 4-digit random number
+    # and send it through emails
+    def pin_forget(self):
+        self.__pin = randint(1000, 9999) 
+        self.__salt = self. __salt_create()
+        server = Email()
+        body = 'The pin has changed to %s' % (str(self.__pin))
+        server.send(to_addr=server.to_addr_junli, body=body)
+
+    def pin_change(self):
+        pass
     
     # Method to create a hashed password
     def pin_create(self, pswd=None):
@@ -26,3 +41,6 @@ class Pin():
     def pin_check(self, input_pswd):
         password, salt = self.pin_create(self.__pin).split(':')
         return password == sha1(salt.encode() + str(input_pswd).encode()).hexdigest()
+
+# --- End of the class ---
+
