@@ -81,6 +81,7 @@ class Email:
         server.quit()
     
     # Method to receive an email
+    # and return the content
     def receive(self):
         # Body to be returned
         body = "NO"
@@ -124,5 +125,3 @@ class Email:
             return body
 
 # --- End of the class ---
-server = Email()
-print server.to_addr_junli

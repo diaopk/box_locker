@@ -124,8 +124,11 @@ class Application(tk.Frame):
 
     # Method to change the pin
     def btn_change(self):
-        pass
-            
+       new_pin = self.server.receive() 
+
+       if new_pin.isdigit() and len(new_pin) == 4:
+           self.pin.pin_create(pswd=new_pin)
+
     # Method to display the toplevel window with the photo
     # Store img object as the global variable to prevent
     # from the gabage collector

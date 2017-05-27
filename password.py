@@ -26,16 +26,17 @@ class Pin():
         server = Email()
         body = 'The pin has changed to %s' % (str(self.__pin))
         server.send(to_addr=server.to_addr_junli, body=body)
-
-    def pin_change(self):
-        pass
     
     # Method to create a hashed password
     def pin_create(self, pswd=None):
         if pswd is not None:
-            return sha1(self.__salt.encode() + str(pswd).encode()).hexdigest() + ":" + self.__salt
-        else:
-            return sha1(self.__salt.encode() + str(self.__pin).encode()).hexdigest() + ":" + self.__salt
+            self.__pin = pswd
+            self.__salt = self.__salt_create()
+            server = Email()
+            body = 'The pin has been changed to %s' % (str(self._pin))
+            server.send(to_addr=server.to_addr_junli, body=body)
+
+        return sha1(self.__salt.encode() + str(self.__pin).encode()).hexdigest() + ":" + self.__salt
 
     # Method to check the passwod
     def pin_check(self, input_pswd):
