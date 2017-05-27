@@ -103,7 +103,7 @@ class Application(tk.Frame):
         pin = str(self.e1.get()+self.e2.get()+self.e3.get()+self.e4.get())
 
         # If pin is correct, then accept and clear the entries
-        if self.pswd.pin_check(pin):
+        if self.pin.pin_check(pin):
             print 'Access Accepted'
             self.entries_checker(process='delete')
         else: # Else capture the guy trying to access the box with the wrong pin
