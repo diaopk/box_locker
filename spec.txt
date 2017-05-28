@@ -4,7 +4,7 @@
     - Setp motor
     - A box
 
-* Python module requirments
+* Python modules and libraries 
     UI:
         - Tkinter(a general python graphical module to display keypad and 
           other UIs)
@@ -16,12 +16,22 @@
 
     Email:
         - smtplib(a python module to build service and send emails)
+        - emsil.message_from_string(take a string object to form a message 
+          object
         - email.MIMEMultipart
         - email.MIMEText
         - email.MIMEImage
+        - poplib.POP3_SSL (provide pop3 mail connection)
+
+    Regular Expression:
+        - re.compile (form a compiled regular expression)
     
     Step motor:
         - RPI.GPIO
+
+    hash function
+        - hashlib.sha1 (encrpt the pin)
+        - uuid.uuid4 (generate random numbers)
 
     Others:
         - os(obtain operating system info)
@@ -80,8 +90,10 @@
                     - f* (Frame widgets)
                     - e* (Entry widgets)
                     - btn* (Button widgets)
-                    - cencel, enter, browse and forget (4 buttons)
-                    - ...
+                    - cencel, enter, browse, forget and change(5 buttons)
+                    - server (Emailer.Email object)
+                    - photo_manager (pc.Photo_Manager object)
+                    - pin (password.Pin object)
 
                 - methods
                     - btn_enter()
@@ -92,7 +104,10 @@
                         Call the show_topwin() method with an argument 
                         process='browse'
                     - btn_forget()
-                        ...
+                        call the pin.pin_forget() to generate a new pin
+                    - btn_change()
+                        Receive a new pin from emails and set this pin as
+                        the new pin
                     - btn_cencel(h)
                         Delete values in Entry h
                     - show_topwin(photo=None, **kwarg)
@@ -119,29 +134,38 @@
         - Desciprtion
             This script defines an Email object for constructing the email
             content and sending an email. After finishing constructionof an
-            Email object, call send() method to send it.
+            Email object, call send() method to send emails and call
+            receive() to receive latest emails.
 
         - Example
-            em = Email(photo)
-            em.send('example@example.com')
+            import pc
+            photo = pc.Photo(path, time)
+            em = Email()
+            em.send('example@example.com', photo=photo)
+            print em.receive()
 
         - Emailer.py
             - class Email
                 - attributes: 
                     - __admin_addr (administrator's address)
                     - __pass (administrator's email password)
-                    - __to_addr (the receiver's email address)
+                    - to_addr_caroline (the receiver's email address)
+                    - to_addr_junli (...)
+                    - to_addr_louise (...)
                     - msg (the object holds multiple content about the 
                       email to be sent, including sender, receiver, subject
                       and email content itself)
-                    - image (the photo)
-                    - path (the path to the photo)
-                    - datetime (the datetime the photo took)
                 - method:
-                    - send(to_addr=None)
+                    - send(photo=None, to_addr=None, body=None)
                         - this method is for sending an email to the
                           to_addr. If to_addr is not specified, then send
                           to the default address.
+
+                    - receive(index=None)
+                        - this method is for receiving the mail at given 
+                          index and return value. If index is None, then 
+                          return the value of the latest mail
+
         - ... 
 
     3. Camera stuff
@@ -210,8 +234,73 @@
                     - get_path()
                         Return the path
         - ...
+    
+    4. Pin(or password) stuff
+        - Use uuid.uuid4(), hashlib.sha1(), random.randint(), Emailer.Email()
+        - Description
+            This script defines a Pin class to store the pin or password
 
-    4. Step motor stuff
+        - Example
+            pin = Pin()
+            pin.pin_forget() # generate a random pin
+            pin.pin_create(pswd=1234, change=True) # change the pin to 1234
+            # check the pin and return true or false
+            if pin.pin_check(1234):
+                print 'yes'
+            else:
+                print 'no'
+
+        - class Pin
+            - attributes
+                - __pin (the pin itself)
+                - __salt (the salt value for hashing with the pin value 
+                  together)
+            
+            - methods
+                - __salt_create()
+                    create the random value using uuid.uuid4().hex
+                - pin_create(pswd=None, change=None)
+                    if pswd and change specify at the same time, go for 
+                    changing pin process. pswd is the pin and change is
+                    the boolean value(usually specify True to change).
+                    Return then a new hashed value using hashlib.sha1()
+                    if not specify, return hashed value for the default pin
+                - pin_forget()
+                    Generate the random pin and send emails to inform 
+                    admins
+                - pin_check(input_pswd)
+                    return boolean value to indicate if the input_pswd is
+                    correct or not
+
+    5. Step motor stuff
         - Use RPI.GPIO module.
-        - stepper.py
-        - ...
+        - Description
+            This script defines a Motor class to work with the stepper 
+            moter. There are two methods to process the operations, open()
+            and close()
+
+        - Example
+            motor = Motor()
+            motor.open() # turn 90 degree
+            motor.close() # turn back 90 degree
+
+        - class Motor
+            - attributes
+                - pins (list to store 4 pyhical pins on the board)
+                - seq (a sequence to active the pin)
+                - waittime (the wait time bewteen two pins)
+                
+            - set_waittime(t)
+                Set the wait time
+
+            - open() : turn 90 degree
+            - close() : turn back 90 degree
+
+* Reference
+    1. Pthon Regular Expreesion Documentation: https://docs.python.org/2/howto/regex.html
+    2. Python Picamera Documentation: https://www.raspberrypi.org/documentation/usage/camera/python/README.md
+    3. Python uuid4 module Documentation: https://docs.python.org/2/library/uuid.html#uuid.uuid4
+    4. Python GUI Library, Tkinter 8.5 reference: http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/index.html
+    5. Python email Library Documentation: https://docs.python.org/2/library/email.html
+    6. Python RPI.GPIO WIKI: https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/
+    7. Salted Password Hashing ways: https://crackstation.net/hashing-security.htm

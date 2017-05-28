@@ -10,6 +10,7 @@ from email.MIMEImage import MIMEImage
 from string import join
 from poplib import POP3_SSL
 from email import message_from_string
+from re import compile
 
 class Email:
     def __init__(self):
@@ -64,7 +65,7 @@ class Email:
     
     # Method to receive an email
     # and return the content
-    def receive(self):
+    def receive(self, index=None):
         # Body to be returned
         body = "NO"
 
@@ -74,8 +75,11 @@ class Email:
         server.pass_(self.__pass)
         
         # Get the latest mail
-        latest_mail_index = server.stat()[0]
-        print latest_mail_index
+        if index is None:
+            latest_mail_index = server.stat()[0]
+        else:
+            latest_mail_index = index
+        #print latest_mail_index
         latest_mail = server.retr(latest_mail_index)[1]
         text = join(latest_mail, '\n') # Make email content a string
         messages = message_from_string(text) # Make text string a Message object
@@ -83,16 +87,38 @@ class Email:
 
         # Vertify email addresses from senders
         if self.to_addr_caroline in messages['From'] or self.to_addr_junli in messages['From'] or self.to_addr_louise in messages['From']:
-            for msg in messages.walk():
-                if msg.get_content_type():
-                    # if everyting is fine 
-                    # the body is the pin from emails
-                    body = msg.get_payload(decode=True)
-
+            # If messages object is multipart
+            if messages.is_multipart():
+                for payload in messages.get_payload():
+                    body = payload.get_payload()
+                    #print 'multipart'
+                    #print body
+            else: # If not a multipart
+                for msg in messages.walk():
+                    if msg.get_content_type():
+                        # if everyting is fine 
+                        # the body is the pin from emails
+                        body = msg.get_payload(decode=True)
+                        #print 'Not multipart'
+                        #print body
+        body = str(body).strip()
+        re = compile('[0-9]{4}?')
+        if re.match(body):
+            return body
+        else:
+            return 'NO'
         # Format the body
         # the email body should be something like
-        # <div dir="ltr">...body content...</div>
+        # <div xx="xx">...body content...</div>
         # Format the body content to get the content
+        """re = compile('(<div[\s]{0,1}[^>]*>)([0-9]{4}?)(</div>)')
+        obj = re.match(body)
+        if obj is not None:
+            return obj.group(2)
+        else:
+            return "NO"
+        """
+        """
         if len(body.split('<div dir="ltr">')) > 1:
             body = body.split('<div dir="ltr">')[1]
             if len(body.split('</div>')) > 1:
@@ -105,5 +131,7 @@ class Email:
                 return "NO"
         else:
             return body
-
+        """
 # --- End of the class ---
+#e = Email()
+#print e.receive(244)

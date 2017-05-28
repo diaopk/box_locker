@@ -28,12 +28,12 @@ class Pin():
         server.send(to_addr=server.to_addr_junli, body=body)
     
     # Method to create a hashed password
-    def pin_create(self, pswd=None):
-        if pswd is not None:
+    def pin_create(self, pswd=None, change=None):
+        if pswd is not None and change == True:
             self.__pin = pswd
             self.__salt = self.__salt_create()
             server = Email()
-            body = 'The pin has been changed to %s' % (str(self._pin))
+            body = 'The pin has been changed to %s' % (str(self.__pin))
             server.send(to_addr=server.to_addr_junli, body=body)
 
         return sha1(self.__salt.encode() + str(self.__pin).encode()).hexdigest() + ":" + self.__salt

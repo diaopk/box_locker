@@ -84,7 +84,7 @@ class Application(tk.Frame):
         self.btn9.grid(row=2, column=2, sticky=tk.W+tk.E)
         self.btn0.grid(row=3, column=1, sticky=tk.W+tk.E)
 
-        # cencel, enter, browse and forget buttons
+        # cencel, enter, browse, forget and change buttons
         self.cencel = tk.Button(self.f2, text='Cencel', command=lambda:self.entries_checker(process='delete'))
         self.enter = tk.Button(self.f2, text='Enter', command=lambda:self.btn_enter()) 
         self.browse = tk.Button(self.f2, text='Browse', command=lambda:self.btn_browse())
@@ -100,10 +100,10 @@ class Application(tk.Frame):
     # Method to check pin
     def btn_enter(self):
         # Make 4 digits a string
-        pin = str(self.e1.get()+self.e2.get()+self.e3.get()+self.e4.get())
+        input_pin = str(self.e1.get()+self.e2.get()+self.e3.get()+self.e4.get())
 
         # If pin is correct, then accept and clear the entries
-        if self.pin.pin_check(pin):
+        if self.pin.pin_check(input_pin):
             print 'Access Accepted'
             self.entries_checker(process='delete')
         else: # Else capture the guy trying to access the box with the wrong pin
@@ -125,9 +125,11 @@ class Application(tk.Frame):
     # Method to change the pin
     def btn_change(self):
        new_pin = self.server.receive() 
-
+       #print new_pin
+       
        if new_pin.isdigit() and len(new_pin) == 4:
-           self.pin.pin_create(pswd=new_pin)
+           self.pin.pin_create(pswd=new_pin, change=True)
+           
 
     # Method to display the toplevel window with the photo
     # Store img object as the global variable to prevent
