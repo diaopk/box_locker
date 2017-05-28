@@ -250,7 +250,8 @@
             else:
                 print 'no'
 
-        - class Pin
+        - password.py
+          Pin class
             - attributes
                 - __pin (the pin itself)
                 - __salt (the salt value for hashing with the pin value 
