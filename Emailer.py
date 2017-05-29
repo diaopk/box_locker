@@ -16,7 +16,7 @@ class Email:
     def __init__(self):
         # Define email addresses
         self.__admin_addr = 'junliliang1214@gmail.com'
-        self.__pass = '%!&#!^^%!yyzaA'
+        self.__pass = '%!&#!^^%!yyzaAidl#!$!@@#!'
         self.to_addr_caroline = '@gmail.com'
         self.to_addr_junli = 'diaopkaique@gmail.com'
         self.to_addr_louise = '@gmail.com'
