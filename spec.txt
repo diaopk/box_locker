@@ -307,7 +307,7 @@
             - close() : turn back 90 degree
 
 * Reference
-    1. Pthon Regular Expreesion Documentation: https://docs.python.org/2/howto/regex.html
+    1. Python Regular Expreesion Documentation: https://docs.python.org/2/howto/regex.html
     2. Python Picamera Documentation: https://www.raspberrypi.org/documentation/usage/camera/python/README.md
     3. Python uuid4 module Documentation: https://docs.python.org/2/library/uuid.html#uuid.uuid4
     4. Python GUI Library, Tkinter 8.5 reference: http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/index.html
