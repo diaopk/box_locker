@@ -47,8 +47,17 @@
     A box with LCD screen and a camera on the top of the box can capture 
     whoever try to enter a pin and open the box. If someone try to open the
     the box with a wrong pin, s/he will be captured as the piture that will
-    be displaied on the LCD and sent to the admin through Email. People 
-    only can enter pin on the LCD.
+    be displaied on the LCD and sent the admin a photo through Email.
+
+    functoinal buttons:
+        there is a browse button providing an album of photoes. people can 
+        whoever try to open the box with the wrong pin.
+        there are forget and change button for changing pin. Forget button
+        generate a random and send it to admins through emails. Change
+        button allows admins change the pin through emails. To do this, 
+        admins should send the email with only 4-digit number to 
+        junliliang1214@gmail.com, then click the change button to achieve
+        changing pin through emails.
 
 * Jobs
     1. Build or program a UI
