@@ -1,70 +1,126 @@
-#!/usr/bin/python
-# Import required libraries
-import sys
-import time
-import RPi.GPIO as GPIO
- 
-# Use BCM GPIO references
-# instead of physical pin numbers
-GPIO.setmode(GPIO.BCM)
-  
-# Define GPIO signals to use
-# Physical pins 11,15,16,18
-# GPIO17,GPIO22,GPIO23,GPIO24
-StepPins = [17,22,23,24]
-   
-# Set all pins as output
-for pin in StepPins:
-    print "Setup pins"
-    GPIO.setup(pin,GPIO.OUT)
-    GPIO.output(pin, False)
-              
-# Define advanced sequence
-# as shown in manufacturers datasheet
-Seq = [[1,0,0,1],
-        [1,0,0,0],
-        [1,1,0,0],
-        [0,1,0,0],
-        [0,1,1,0],
-        [0,0,1,0],
-        [0,0,1,1],
-        [0,0,0,1]]
-                      
-StepCount = len(Seq) # 8
-StepDir = 1 # Set to 1 or 2 for clockwise
-                          # Set to -1 or -2 for anti-clockwise
-                           
-# Read wait time from command line
-if len(sys.argv)>1:
-    WaitTime = int(sys.argv[1])/float(1000)
-else:
-    WaitTime = 10/float(1000)
-                                    
-# Initialise variables
-StepCounter = 0
-                                     
-# Start main loop
-while True:
-                                          
-    print StepCounter,
-    print Seq[StepCounter]
-                                              
-    for pin in range(0,4):
-        xpin=StepPins[pin]# Get GPIO
-        if Seq[StepCounter][pin]==1:
-            print " Enable GPIO %i" %(xpin) 
-            GPIO.output(xpin, True)         
-        else:                               
-            GPIO.output(xpin, False)        
-            
-    StepCounter += StepDir                      
-    
-    # If we reach the end of the sequence
-    # start again
-    if (StepCounter>=StepCount):
-        StepCounter = 0
-    if (StepCounter<0):
-        StepCounter = StepCount+StepDir     
+# This script provides stepper motor control
+# to turn the xxx
+# using RPI.GPIO library
+
+# Import required modules
+import RPI.GPIO as GPIO
+from time import sleep
+
+# Define a Motor class to control stepper motor
+# --- Start of the class ---
+class Motor:
+    def __init__(self, pin1, pin2, pin3, pin4):
+        GPIO.setmode(GPIO.BOARD)
         
-    # Wait before moving on
-    time.sleep(WaitTime)
+        # Set pins
+        self.pins = [pin1, pin2, pin3, pin4]
+        
+        # Set all pins as output
+        for pin in self.pins:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, 0)
+
+        # Define an advanced sequence
+        self.seq = [[1,0,0,1],
+                [1,0,0,0],
+                [1,1,0,0],
+                [0,1,0,0],
+                [0,1,1,0],
+                [0,0,1,0],
+                [0,0,1,1],
+                [0,0,0,1]]
+
+        self.seq1 = [[1,0,0,0],
+                [1,1,0,0],
+                [0,1,0,0],
+                [0,1,1,0],
+                [0,0,1,0],
+                [0,0,1,1],
+                [0,0,0,1],
+                [1,0,0,1]]
+
+        self.seq1_reverse = [[1,0,0,1],
+                [0,0,0,1],
+                [0,0,1,1],
+                [0,0,1,0],
+                [0,1,1,0],
+                [0,1,0,0],
+                [1,1,0,0],
+                [1,0,0,0]]
+
+        self.seq2 = [[1,0,0,0],
+                [0,1,0,0],
+                [0,0,1,0],
+                [0,0,0,1]]
+
+        self.seq2_reverse = [[1,0,0,0],
+                [0,0,0,1],
+                [0,0,1,0],
+                [0,1,0,0]]
+
+        self.step_count = len(self.seq)
+        # Set to 1 or 2 for clockwise
+        # Set to -1 or -2 for anti-clockwise
+        self.step_add = 1
+        self.step_counter = 0
+
+        # Define the wait time
+        self.waittime = 0.00001
+
+    # Method to set attributes
+    def set_waittime(self, t): self.waittime = t
+    def set_step_add(self, a): self.step_add = a
+
+    # Method to turn 90 deg
+    def open(self):
+        print self.step_counter
+        print self.seq[self.step_counter]
+
+        for i in range(0, 512/4):
+        for p in range(0, 4):
+            pin_on_board = self.seq[p]
+            if self.seq[self.step_counter][p] == 1:
+                print "Enable pin %i" % (pin_on_board)
+                GPIO.output(pin_on_board, 1)
+            else:
+                GPIO.output(pin_on_board, 0)
+
+        self.step_counter += self.step_add
+
+        # If it rearches the end of the sequence
+        # start again
+        if self.step_counter >= self.step_count:
+            self.step_counter = 0
+
+        sleep(self.waittime)
+
+    # Reset the pins
+    GPIO.cleanup()
+
+    # Method to turn back 90 deg
+    def close(self):
+        print self.step_conuter
+        print self.seq[self.step_counter]
+
+        for i in range(0, 128):
+            for p in range(0,4):
+                pin_on_board = self.seq[p]
+                if self.seq[self.step_counter][p] == 1:
+                    print "Enable pin %i" % (pin_on_board)
+                    GPIO.output(pin_on_board, 1)
+                else:
+                    GPIO.output(pin_on_board, 0)
+
+            self.step_counter += self.step_add
+
+            # If it rearches the end of the sequence
+            # start agagin
+            if self.step_counter >= self.step_count:
+                self.step_counter = 0
+
+            sleep(self.waittime)
+
+        # Reset the pins
+        GPIO.cleanup()
+            
+# --- End of the class ---
