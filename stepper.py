@@ -91,14 +91,14 @@ class Motor:
     #GPIO.cleanup()
 
     # Method to turn back 90 deg
-    def close(self):
+    def open(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
         for pin in self.pins:
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, False)
 
-        for i in range(0, 512*3):
+        for i in range(0, 512*2):
             for pin in range(0,4):
                 pin_on_board = self.pins[pin]
                 if self.seq1_reverse[self.step_counter][pin] :
@@ -122,14 +122,14 @@ class Motor:
         GPIO.cleanup()
     
     # Method to turn 90 degree
-    def open(self):
+    def close(self):
         
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
         for pin in self.pins:
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, False)
-        for i in range(0, 512*3):
+        for i in range(0, 512*2):
             for pin in range(0,4):
                 xpin=self.pins[pin]# Get GPIO
                 
