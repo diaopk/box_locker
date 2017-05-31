@@ -109,7 +109,7 @@ class Application(tk.Frame):
         # If pin is correct, then accept and clear the entries
         if self.pin.pin_check(input_pin):
             print 'Access Accepted'
-            self.motor.open_one()
+            self.motor.open()
             self.entries_checker(process='delete')
         else: # Else capture the guy trying to access the box with the wrong pin
             print 'Access Not Accepted'
