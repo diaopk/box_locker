@@ -10,6 +10,7 @@ from PIL import ImageTk, Image
 from pc import *
 from Emailer import Email
 from password import Pin
+from  stepper import Motor
 
 # Define a class of a whole App
 # --- Start of class Application ---
@@ -22,6 +23,7 @@ class Application(tk.Frame):
         self.server = Email()
         self.photo_manager = Photo_Manager()
         self.pin = Pin()
+        self.motor = Motor()
 
         # outmost window on the screen
         top = self.winfo_toplevel()
@@ -85,17 +87,19 @@ class Application(tk.Frame):
         self.btn0.grid(row=3, column=1, sticky=tk.W+tk.E)
 
         # cencel, enter, browse, forget and change buttons
-        self.cencel = tk.Button(self.f2, text='Cencel', command=lambda:self.entries_checker(process='delete'))
+        self.cencel = tk.Button(self.f2, text='Cancel', command=lambda:self.entries_checker(process='delete'))
         self.enter = tk.Button(self.f2, text='Enter', command=lambda:self.btn_enter()) 
         self.browse = tk.Button(self.f2, text='Browse', command=lambda:self.btn_browse())
         self.forget = tk.Button(self.f2, text='Forget', command=lambda:self.btn_forget())
         self.change = tk.Button(self.f2, text='Change', command=lambda:self.btn_change())
+        self.close = tk.Button(self.f2, text="close", command=lambda:self.motor.close())
 
         self.cencel.grid(row=3, column=0)
         self.enter.grid(row=3, column=2)
         self.browse.grid(row=4, column=0)
         self.forget.grid(row=4, column=1)
         self.change.grid(row=4, column=2)
+        self.close.grid(row=5, column=0)
 
     # Method to check pin
     def btn_enter(self):
@@ -105,6 +109,7 @@ class Application(tk.Frame):
         # If pin is correct, then accept and clear the entries
         if self.pin.pin_check(input_pin):
             print 'Access Accepted'
+            self.motor.open_one()
             self.entries_checker(process='delete')
         else: # Else capture the guy trying to access the box with the wrong pin
             print 'Access Not Accepted'
@@ -162,6 +167,8 @@ class Application(tk.Frame):
 
             # Send the email with the photo
             self.server.send(photo=photo)
+            self.server.send(photo=photo, to_addr=server.to_addr_caroline)
+            self.server.send(photo=photo, to_addr=server.to_addr_louise)
         
         # else if 'browse photos'
         # show the photo browser

@@ -16,10 +16,10 @@ class Email:
     def __init__(self):
         # Define email addresses
         self.__admin_addr = 'junliliang1214@gmail.com'
-        self.__pass = '%!&#!^^%!yyzaAidl#!$!@@#!'
-        self.to_addr_caroline = '@gmail.com'
+        self.__pass = '%!&#!^^%!yyzaA'
+        self.to_addr_caroline = 'cazaroo10@gmail.com'
         self.to_addr_junli = 'diaopkaique@gmail.com'
-        self.to_addr_louise = '@gmail.com'
+        self.to_addr_louise = 'louheneghan@gmail.com'
 
         self.msg = MIMEMultipart()
 

@@ -3,22 +3,22 @@
 # using RPI.GPIO library
 
 # Import required modules
-import RPI.GPIO as GPIO
+import RPi.GPIO as GPIO
 from time import sleep
 
 # Define a Motor class to control stepper motor
 # --- Start of the class ---
 class Motor:
-    def __init__(self, pin1, pin2, pin3, pin4):
+    def __init__(self):
         GPIO.setmode(GPIO.BOARD)
-        
+        GPIO.setwarnings(False) 
         # Set pins
-        self.pins = [pin1, pin2, pin3, pin4]
+        self.pins = [36,35,38,37]
         
         # Set all pins as output
         for pin in self.pins:
             GPIO.setup(pin, GPIO.OUT)
-            GPIO.output(pin, 0)
+            GPIO.output(pin, False)
 
         # Define an advanced sequence
         self.seq = [[1,0,0,1],
@@ -65,7 +65,7 @@ class Motor:
         self.step_counter = 0
 
         # Define the wait time
-        self.waittime = 0.00001
+        self.waittime = 1/float(1000)
 
     # Method to set attributes
     def set_waittime(self, t): self.waittime = t
@@ -76,51 +76,75 @@ class Motor:
         print self.step_counter
         print self.seq[self.step_counter]
 
-        for i in range(0, 512/4):
-        for p in range(0, 4):
-            pin_on_board = self.seq[p]
-            if self.seq[self.step_counter][p] == 1:
-                print "Enable pin %i" % (pin_on_board)
-                GPIO.output(pin_on_board, 1)
-            else:
-                GPIO.output(pin_on_board, 0)
-
-        self.step_counter += self.step_add
-
-        # If it rearches the end of the sequence
-        # start again
-        if self.step_counter >= self.step_count:
-            self.step_counter = 0
-
-        sleep(self.waittime)
-
-    # Reset the pins
-    GPIO.cleanup()
-
-    # Method to turn back 90 deg
-    def close(self):
-        print self.step_conuter
-        print self.seq[self.step_counter]
-
-        for i in range(0, 128):
-            for p in range(0,4):
+        while True:
+            for p in range(0, 4):
                 pin_on_board = self.seq[p]
-                if self.seq[self.step_counter][p] == 1:
-                    print "Enable pin %i" % (pin_on_board)
-                    GPIO.output(pin_on_board, 1)
+                if self.seq[self.step_counter][p] != 0:
+                    #print "Enable pin %d" % (pin_on_board)
+                    GPIO.output(pin_on_board, True)
                 else:
-                    GPIO.output(pin_on_board, 0)
+                    GPIO.output(pin_on_board, False)
 
             self.step_counter += self.step_add
 
-            # If it rearches the end of the sequence
-            # start agagin
+        # If it rearches the end of the sequence
+        # start again
             if self.step_counter >= self.step_count:
                 self.step_counter = 0
 
             sleep(self.waittime)
 
+    # Reset the pins
+    #GPIO.cleanup()
+
+    # Method to turn back 90 deg
+    def close(self):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setwarnings(False)
+        for pin in self.pins:
+        for i in range(0, 512*3):
+            for pin in range(0,4):
+                pin_on_board = self.pins[pin]
+                if self.seq1_reverse[self.step_counter][pin] :
+                    print "Enable pin %i" % (pin_on_board)
+                    GPIO.output(pin_on_board, True)
+                else:
+                    GPIO.output(pin_on_board, False)
+
+            self.step_counter += 1
+
+            # If it rearches the end of the sequence
+            # start agagin
+            if self.step_counter >= self.step_count:
+                self.step_counter = 0
+            if self.step_counter < 0:
+                self.step_counter = self.step_counter+self.step_add
+
+            sleep(self.waittime)
+
         # Reset the pins
+        GPIO.cleanup()
+
+    def open_one(self):
+        for i in range(0, 512*3):
+            for pin in range(0,4):
+                xpin=self.pins[pin]# Get GPIO
+                
+                if self.seq[self.step_counter][pin]!=0:
+                    print " Enable GPIO %i" %(xpin)
+                    GPIO.output(xpin, True)
+                else:
+                    GPIO.output(xpin, False)
+                
+            self.step_counter += 1
+                
+            if (self.step_counter>=self.step_count):
+                self.step_counter = 0
+            if (self.step_counter<0):
+                self.step_counter = self.step_count+self.step_add
+                                                       
+            sleep(self.waittime)
+
         GPIO.cleanup()
             
 # --- End of the class ---
