@@ -10,16 +10,9 @@ from time import sleep
 # --- Start of the class ---
 class Motor:
     def __init__(self):
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setwarnings(False) 
         # Set pins
         self.pins = [36,35,38,37]
         
-        # Set all pins as output
-        for pin in self.pins:
-            GPIO.setup(pin, GPIO.OUT)
-            GPIO.output(pin, False)
-
         # Define an advanced sequence
         self.seq = [[1,0,0,1],
                 [1,0,0,0],
@@ -72,7 +65,7 @@ class Motor:
     def set_step_add(self, a): self.step_add = a
 
     # Method to turn 90 deg
-    def open(self):
+    def open_test(self):
         print self.step_counter
         print self.seq[self.step_counter]
 
@@ -102,6 +95,9 @@ class Motor:
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
         for pin in self.pins:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, False)
+
         for i in range(0, 512*3):
             for pin in range(0,4):
                 pin_on_board = self.pins[pin]
@@ -124,8 +120,15 @@ class Motor:
 
         # Reset the pins
         GPIO.cleanup()
-
-    def open_one(self):
+    
+    # Method to turn 90 degree
+    def open(self):
+        
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setwarnings(False)
+        for pin in self.pins:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, False)
         for i in range(0, 512*3):
             for pin in range(0,4):
                 xpin=self.pins[pin]# Get GPIO

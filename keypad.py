@@ -134,7 +134,6 @@ class Application(tk.Frame):
        
        if new_pin.isdigit() and len(new_pin) == 4:
            self.pin.pin_create(pswd=new_pin, change=True)
-           
 
     # Method to display the toplevel window with the photo
     # Store img object as the global variable to prevent

@@ -9,7 +9,7 @@ from Emailer import Email
 
 class Pin():
     def __init__(self):
-        self.__pin = 1234
+        self.__pin = 1234 # default
         self.__salt = self.__salt_create()
 
     # Method to create the salt
@@ -25,6 +25,8 @@ class Pin():
         self.__salt = self. __salt_create()
         server = Email()
         body = 'The pin has changed to %s' % (str(self.__pin))
+
+        # Send emails to infrom of the changed pin
         server.send(to_addr=server.to_addr_junli, body=body)
         server.send(to_addr=server.to_addr_caroline, body=body)
         server.send(to_addr=server.to_addr_louise, body=body)
@@ -36,6 +38,8 @@ class Pin():
             self.__salt = self.__salt_create()
             server = Email()
             body = 'The pin has been changed to %s' % (str(self.__pin))
+
+            # Send emails to infrom of the changed pin
             server.send(to_addr=server.to_addr_junli, body=body)
             server.send(to_addr=server.to_addr_caroline, body=body)
             server.send(to_addr=server.to_addr_louise, body=body)
