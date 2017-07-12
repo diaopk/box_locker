@@ -15,11 +15,11 @@ from re import compile
 class Email:
     def __init__(self):
         # Define email addresses
-        self.__admin_addr = 'junliliang1214@gmail.com'
-        self.__pass = '%!&#!^^%!yyzaA'
-        self.to_addr_caroline = 'cazaroo10@gmail.com'
-        self.to_addr_junli = 'diaopkaique@gmail.com'
-        self.to_addr_louise = 'louheneghan@gmail.com'
+        self.__admin_addr = ''
+        self.__pass = ''
+        self.to_addr_caroline = ''
+        self.to_addr_junli = ''
+        self.to_addr_louise = ''
 
         self.msg = MIMEMultipart()
 
